@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{view.index.title}">Welcome!</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="../../../resources/css/bootstrap.min.css" rel="stylesheet" media="screen"
+          th:href="@{/resources/css/bootstrap.min.css}"/>
+    <link href="../../../resources/css/core.css" rel="stylesheet" media="screen" th:href="@{/resources/css/core.css}"/>
+    <link href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet"/>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+    <script src="../../../resources/js/bootstrap.min.js" th:src="@{/resources/js/bootstrap.min.js}"></script>
+    <script src="../../../resources/js/money.min.js" th:src="@{/resources/js/money.min.js}"></script>
+    <script src="../../../resources/js/dateFormat.js" th:src="@{/resources/js/dateFormat.js}"></script>
+    <script src="../../../resources/js/jquery.blockUI.js" th:src="@{/resources/js/jquery.blockUI.js}"></script>
+    <script src="../../../resources/js/mainPage.js" th:src="@{/resources/js/mainPage.js}"></script>
+    <script th:inline="javascript">
+        var initialValue = 1.0;
+        var initialFrom = "EUR";
+        var initialTo = "USD";
+        var ratesCache = {};
+        ratesCache[ [[${rates.timestamp}]] ] = [[${rates.rates}]];
+        fx.base = [[${rates.baseCurrency}]];
+        fx.rates = ratesCache[ [[${rates.timestamp}]] ];
+    </script>
+</head>
+<body>
+<div th:replace="fragments/header :: header">&nbsp;</div>
+<div class="container">
+    <!-- /* Handle the flash message */-->
+    <th:block th:if="${message != null}">
+        <!-- /* The message code is returned from the @Controller */ -->
+        <div th:replace="fragments/alert :: alert (type=${#strings.toLowerCase(message.type)}, message=#{${message.message}(${#authentication.name})})">
+            &nbsp;</div>
+    </th:block>
+
+    <div class="col-md-1"/>
+    <div class="col-md-6">
+
+        <br/>
+        <blockquote>
+            <p class="text-center" th:text="#{view.home.mainMessage}"></p>
+        </blockquote>
+
+        <div class="row">
+            <div class="form-inline pull-right">
+                <div class="form-group">
+                    <input name="amount" id="fromAmount"/>
+                </div>
+
+                <div class="form-group">
+                    <select name="fromCurrency" id="fromCurrency">
+                        <option th:each="currency : ${currencies}"
+                                th:value="${currency.currencyCode}"
+                                th:text="${currency.displayName}">empty
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="form-inline pull-right">
+                <div class="form-group">
+            <span class="lead">
+                <span id="result" class="label label-primary"></span>
+            </span>
+                </div>
+
+                <div class="form-group">
+                    <select name="toCurrency" id="toCurrency">
+                        <option th:each="currency : ${currencies}"
+                                th:value="${currency.currencyCode}"
+                                th:text="${currency.displayName}">empty
+                        </option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="row text-center">
+            <p>Date: <input type="text" id="ratesDate"/></p>
+        </div>
+
+        <div class="row text-center">
+            <a id="save" class="btn btn-default" href="javascript:void(0)" role="button">
+                <span class="glyphicon glyphicon-save" aria-hidden="true"></span>
+                Save
+            </a>
+        </div>
+    </div>
+    <div class="col-md-1"/>
+
+    <div class="col-md-4">
+        <ul id="queries">
+        </ul>
+    </div>
+
+</div>
+</body>
+</html>
