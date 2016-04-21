@@ -10,6 +10,7 @@ import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.Collection;
 
 @Controller
 class AccountController {
@@ -36,5 +37,13 @@ class AccountController {
     @Secured("ROLE_ADMIN")
     public Account account(@PathVariable("id") Long id) {
         return accountRepository.findOne(id);
+    }
+
+    @RequestMapping(value = "account", method = RequestMethod.GET)
+    @ResponseStatus(value = HttpStatus.OK)
+    @ResponseBody
+    @Secured("ROLE_ADMIN")
+    public Collection<Account> accounts(Long id) {
+        return accountRepository.findAll();
     }
 }
