@@ -60,7 +60,7 @@
         dateFormat: "yy-mm-dd",
         onSelect: refreshRates
      });
-     //var currentDate = $( ".selector" ).datepicker( "getDate" );
+     $("#ratesDate").val("(now)")
 
      $("#fromAmount").val(initialValue);
      $("#fromCurrency").val(initialFrom);
