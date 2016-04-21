@@ -23,6 +23,7 @@ import java.util.Properties;
 @EnableTransactionManagement
 @EnableJpaRepositories(basePackageClasses = Application.class)
 class JpaConfig {
+    public static final String SYSTEM_ENV_MARKER = "-SYSTEM-";
 
     @Value("${dataSource.driverClassName}")
     private String driver;
@@ -41,6 +42,7 @@ class JpaConfig {
     public DataSource dataSource() {
         HikariConfig config = new HikariConfig();
         config.setDriverClassName(driver);
+        this.fillSystemEnvs();
         config.setJdbcUrl(url);
         config.setUsername(username);
         config.setPassword(password);
@@ -50,6 +52,18 @@ class JpaConfig {
         config.addDataSourceProperty("useServerPrepStmts", "true");
 
         return new HikariDataSource(config);
+    }
+
+    private void fillSystemEnvs() {
+        if (SYSTEM_ENV_MARKER.equals(url)) {
+            url = System.getenv("JDBC_DATABASE_URL");
+        }
+        if (SYSTEM_ENV_MARKER.equals(username)) {
+            username = System.getenv("JDBC_DATABASE_USERNAME");
+        }
+        if (SYSTEM_ENV_MARKER.equals(password)) {
+            password = System.getenv("JDBC_DATABASE_PASSWORD");
+        }
     }
 
     @Bean
