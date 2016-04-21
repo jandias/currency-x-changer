@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.util.Collections;
+import java.util.Optional;
 
 @Service
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
@@ -33,8 +34,10 @@ public class AccountService implements UserDetailsService {
 
     @PostConstruct
     protected void initialize() {
-        save(new Account("user", "demo", "ROLE_USER"));
-        save(new Account("admin", "admin", "ROLE_ADMIN"));
+        if (!findByEmail("user").isPresent()) {
+            save(new Account("user", "demo", "ROLE_USER"));
+            save(new Account("admin", "admin", "ROLE_ADMIN"));
+        }
     }
 
     @Transactional
@@ -51,6 +54,12 @@ public class AccountService implements UserDetailsService {
             throw new UsernameNotFoundException("user not found");
         }
         return account;
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<Account> findByEmail(String email) {
+        return Optional.ofNullable(
+                accountRepository.findOneByEmail(email));
     }
 
     @Override
