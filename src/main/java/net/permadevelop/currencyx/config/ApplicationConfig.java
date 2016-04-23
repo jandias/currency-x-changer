@@ -8,7 +8,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
 @Configuration
-@PropertySource("classpath:persistence.properties")
+@PropertySource("classpath:persistence-${db.code:pgsql}.properties")
 @PropertySource("classpath:application.properties")
 @ComponentScan(basePackageClasses = Application.class)
 class ApplicationConfig {
