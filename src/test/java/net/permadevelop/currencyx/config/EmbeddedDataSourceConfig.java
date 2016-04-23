@@ -3,6 +3,7 @@ package net.permadevelop.currencyx.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 
@@ -12,6 +13,7 @@ import javax.sql.DataSource;
  * The data source config that can be used in integration tests.
  */
 @Configuration
+@PropertySource("classpath:persistence.properties")
 @Profile("test")
 public class EmbeddedDataSourceConfig {
 

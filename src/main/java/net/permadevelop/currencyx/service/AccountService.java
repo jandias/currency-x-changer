@@ -26,6 +26,9 @@ import java.util.Optional;
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class AccountService implements UserDetailsService {
 
+    private static final String DEFAULT_ADMIN_LOGIN = "admin";
+    private static final String DEFAULT_ADMIN_PASSWORD = "admin";
+
     @Autowired
     private AccountRepository accountRepository;
 
@@ -34,9 +37,10 @@ public class AccountService implements UserDetailsService {
 
     @PostConstruct
     protected void initialize() {
-        if (!findByEmail("user").isPresent()) {
-            save(new Account("user", "demo", "ROLE_USER"));
-            save(new Account("admin", "admin", "ROLE_ADMIN"));
+        if (!findByEmail(DEFAULT_ADMIN_LOGIN).isPresent()) {
+            //TODO: remove user
+            save(new Account("user", "demo", "ROLE_ADMIN"));
+            save(new Account(DEFAULT_ADMIN_LOGIN, DEFAULT_ADMIN_PASSWORD, "ROLE_ADMIN"));
         }
     }
 

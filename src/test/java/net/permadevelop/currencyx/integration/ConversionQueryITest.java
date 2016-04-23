@@ -2,6 +2,7 @@ package net.permadevelop.currencyx.integration;
 
 import net.permadevelop.currencyx.config.WebAppConfigurationAware;
 import net.permadevelop.currencyx.domain.ConversionQuery;
+import net.permadevelop.currencyx.service.AccountService;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.security.authentication.TestingAuthenticationToken;
@@ -9,6 +10,7 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.test.context.support.WithMockUser;
 
+import javax.inject.Inject;
 import java.time.Instant;
 
 import static org.hamcrest.Matchers.hasSize;
@@ -20,11 +22,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class ConversionQueryITest extends WebAppConfigurationAware {
 
+    private static final String USER_LOGIN = "user";
+    private static final String USER_PASSWORD = "password";
+
     private TestingAuthenticationToken userAuthentication;
+
+    @Inject
+    private AccountService accountService;
 
     @Before
     public void setUp() throws Exception {
-        User user = new User("user", "", AuthorityUtils.createAuthorityList("ROLE_USER"));
+        //TODO: add user save (and remove from AccountService)
+        //accountService.save(new Account(USER_LOGIN, USER_PASSWORD, "ROLE_USER"));
+        User user = new User(USER_LOGIN, USER_PASSWORD, AuthorityUtils.createAuthorityList("ROLE_USER"));
         userAuthentication = new TestingAuthenticationToken(user, null);
     }
 

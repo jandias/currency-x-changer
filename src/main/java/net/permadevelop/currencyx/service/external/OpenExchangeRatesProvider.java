@@ -4,6 +4,7 @@ import net.permadevelop.currencyx.domain.Rates;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +28,7 @@ public class OpenExchangeRatesProvider implements CurrencyProvider {
     private String appId;
 
     @Override
+    @Cacheable("currencies")
     public Set<String> acceptedCurrencies() {
         ResponseEntity<OerCurrencies> response
                 = makeRequest(CURRENCIES_URI, new ParameterizedTypeReference<OerCurrencies>() {
